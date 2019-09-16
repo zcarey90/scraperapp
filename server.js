@@ -2,7 +2,7 @@ var express = require("express");
 var bodyParser = require("body-Parser");
 var request = require("request");
 var mongoose = require("mongoose");
-var path = require("path");
+var logger = require("logger");
 
 var axios = require(axios);
 var cheerio = require(cheerio);
@@ -16,4 +16,15 @@ mongoose.Promise = Promise;
 
 var db = require("./models");
 
+var PORT = 8889;
+
 var app = express();
+
+app.use(logger("dev"));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(express.static(public));
+
+mongoose.connect("mongodb://localhost/scraperapp", { useNewUrlParser: true });
