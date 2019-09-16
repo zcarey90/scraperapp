@@ -28,3 +28,17 @@ app.use(express.json());
 app.use(express.static(public));
 
 mongoose.connect("mongodb://localhost/scraperapp", { useNewUrlParser: true });
+
+app.get("/scrape", function(req, res)) {
+
+    axios.get("http://www.mmamania.com/").then(function(response)) {
+        
+    var $ = cheerio.load(response.data);
+
+    $("article h1").each(function(i, element) {
+
+        var result = {};
+
+        result.title = $(this)
+        .text();
+}
