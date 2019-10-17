@@ -4,7 +4,7 @@ var exphbs = require("express-handlebars");
 var mongoose = require("mongoose");
 var logger = require("logger");
 
-var request = require("request");
+var axios = require("axios");
 var cheerio = require("cheerio");
 
 var db = require("./models");
@@ -44,7 +44,7 @@ app.get("/scrape", function(req, res) {
       titleArr.push(dbArticle[z].title);
     }
     console.log(titleArr);
-    request("http://www.mmamania.com/", function(error, response, html) {
+    axios("http://www.mmamania.com/", function(error, response, html) {
       if (!error && response.statusCode == 200) {
       }
       var $ = cheerio.load(html, {
