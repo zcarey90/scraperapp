@@ -1,4 +1,3 @@
-
 var router = require("express").Router();
 var db = require("../models");
 var axios = require(axios);
@@ -28,7 +27,7 @@ router.get("/", function(req, res) {
       console.log("title");
       results.push(result.title);
     });
+    res.render("home", { records: results });
   });
-  res.render("home", { records: results });
 });
 module.exports = router;
