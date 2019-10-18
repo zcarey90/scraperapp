@@ -1,9 +1,9 @@
 $.getJSON("/api/articles", function(data) {
   for (var i = 0; i < data.length; i++) {
     $("#articles").append(`<li>
-    <h3>${data[i].title}</h3>;
-    <a href="${data[i].link}">Check it out!</a>
-    <span>${data[i].excerpt}</span>
+    <h3>${data[i].headline}</h3>;
+    <a href="${data[i].website}">Check it out!</a>
+    
 
     </li>`);
   }

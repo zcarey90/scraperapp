@@ -30,45 +30,49 @@ mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-var results = [];
 
 app.get("/", function(req, res) {
   res.render("index");
 });
 
 app.get("/scrape", function(req, res) {
-  var found;
-  var titleArr = [];
-  return axios.get("http://www.mmamania.com/").then(function(response) {
-    var $ = cheerio.load(response.data);
-    console.log("here");
-    $("div.c-entry-box--compact__body h2").each(function(i, element) {
-      var result = {};
-      console.log(result);
+  return axios
+    .get("http://www.mmamania.com/")
+    .then(function(response) {
+      var $ = cheerio.load(response.data);
+      var results = [];
 
-      result.title = $(element)
-        .children("a")
-        .text();
-      console.log(result.title);
-      found = titleArr.includes(result.title);
-      result.link = $(element)
-        .children("a")
-        .attr("href");
-      console.log(result.link);
-      // result.excerpt = $(element)
-      //   .parent()
-      //   .children(".td-excerpt")
-      //   .text()
-      //   .trim();
-      // console.log(result.excerpt);
-      
-    });
-    return db.Article.create(results)
-    
-    .then(function{req,res}{
+      $("div.c-entry-box--compact__body h2").each(function(i, element) {
+        var result = {};
+
+        result.title = $(element)
+          .children("a")
+          .text();
+        result.link = $(element)
+          .children("a")
+          .attr("href");
+        // result.excerpt = $(element)
+        //   .parent()
+        //   .children(".td-excerpt")
+        //   .text()
+        //   .trim();
+        // console.log(result.excerpt);
+
+        console.log(result);
+        results.push(result);
+        db.Article.create({
+          headline: result.title,
+          website: result.link
+        });
+      });
+      return db.Article;
+    })
+    .then(function(req, res) {
       res.render("index");
+    })
+    .catch(function(err) {
+      res.json(err);
     });
-  });
 });
 
 app.get("/api/articles", function(req, res) {
